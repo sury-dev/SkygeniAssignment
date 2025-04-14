@@ -20,6 +20,9 @@ app.use(cors({
 
 // importing routes for modularity
 
+import dataVisualizerRoutes from './routes/dataVisualizer.routes.js'; // for data visualization routes
+
 // routes declaration
+app.use('/api/v1', dataVisualizerRoutes); // for api versioning
 
 export { app }; // export the app instance for use in other files
