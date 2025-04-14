@@ -1,0 +1,12 @@
+{
+  "name": "skygenyassignmentserver",
+  "version": "1.0.0",
+  "description": "server of the assignment given by skygeni",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Suryansh Pandey",
+  "license": "MIT"
+}
