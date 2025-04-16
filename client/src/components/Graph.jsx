@@ -1,105 +1,53 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import * as d3 from 'd3';
-// import './Graph.css'
 
-function Graph({ isAcv = false, maxValue = 0, dat = [] }) {
-
-    maxValue = 910147;
-    isAcv = true;
-
-    const data = [
-        {
-            "label": "Suspect",
-            "acv": 910147,
-            "lost": 237000,
-            "qualified": 673147,
-            "winPercent": 4,
-            "stagePercent": "-"
-        },
-        {
-            "label": "Qualify",
-            "acv": 673147,
-            "lost": 359407,
-            "qualified": 313740,
-            "winPercent": 5,
-            "stagePercent": 74
-        },
-        {
-            "label": "Demo",
-            "acv": 313740,
-            "lost": 176922,
-            "qualified": 136818,
-            "winPercent": 10,
-            "stagePercent": 47
-        },
-        {
-            "label": "Proposal",
-            "acv": 136818,
-            "lost": 104714,
-            "qualified": 32104,
-            "winPercent": 23,
-            "stagePercent": 44
-        },
-        {
-            "label": "Negotiate",
-            "acv": 32104,
-            "lost": 0,
-            "qualified": 32104,
-            "winPercent": 100,
-            "stagePercent": 23
-        },
-        {
-            "label": "Won",
-            "acv": 32104,
-            "lost": "-",
-            "qualified": "-",
-            "winPercent": 100,
-            "stagePercent": 100
-        }
-    ];
+function Graph({ isAcv = false, maxValue = 0, data = [] }) {
+    const svgRef = useRef();
 
     useEffect(() => {
-        const svg = d3.select("#count");
-        const width = svg.attr("width") - 200;
-        console.log(width);
+        if (!data || data.length === 0) return;
+
+        const svg = d3.select(svgRef.current);
+        svg.selectAll("*").remove();
+
+        // const width = svg.attr("width") - 200;
+        const width = svgRef.current.getBoundingClientRect().width - 200;
         const barHeight = 30;
         const barSpacing = 30;
         const leftLabelWidth = 80;
 
-        svg.attr("height", data.length * (barHeight + barSpacing));
+        svg.attr("height", (data.length - 1) * (barHeight + barSpacing));
 
-        data.forEach((d, i) => {
+        for (let i = 0; i < data.length - 1; i++) {
+            const d = data[i];
             const y = i * (barHeight + barSpacing);
+            const value = isAcv ? d.acv : d.count;
 
-            // Group
             const g = svg.append("g").attr("transform", `translate(${leftLabelWidth}, ${y})`);
 
-            const value = isAcv ? d.acv : d.count; // Use acv if isAcv is true
-
-            // Full bar (grey)
+            // Full bar
             g.append("rect")
                 .attr("width", width)
                 .attr("height", barHeight)
                 .attr("fill", "#ccc");
 
-            // Green part
+            // Green bar
             g.append("rect")
-                .attr("width", value / 910147 * width) // Scale to fit the bar width
+                .attr("width", value / maxValue * width)
                 .attr("height", barHeight)
                 .attr("fill", "green")
-                .attr('x', (width - (value / 910147 * width)) / 2);
+                .attr('x', (width - (value / maxValue * width)) / 2);
 
-            // Value in center
+            // Value label
             g.append("text")
                 .attr("x", width / 2)
                 .attr("y", barHeight / 2 + 12)
                 .attr("text-anchor", "middle")
-                .text(`${!isAcv ? '$' : ''}${value}`);
+                .text(`${isAcv ? '$' : ''}${value}`);
 
-            // % label inside bar
-            if (i != 0) {
+            if (i !== 0) {
                 g.append("text")
                     .attr("x", width / 2)
                     .attr("y", (barHeight * -1) / 2 + 12)
@@ -108,29 +56,28 @@ function Graph({ isAcv = false, maxValue = 0, dat = [] }) {
                     .text(`${d.stagePercent}%`);
             }
 
-            // Left stage label
             svg.append("text")
                 .attr("x", 0)
                 .attr("y", y + barHeight / 2)
                 .attr("class", "label")
                 .text(d.label);
 
-            // Right-side %
             svg.append("text")
                 .attr("x", width + leftLabelWidth + 10)
                 .attr("y", y + barHeight / 2)
                 .attr("class", "label")
                 .text(`${d.winPercent}%`);
-        });
-    }, []);
+        }
+    }, [data, maxValue, isAcv]);
 
     return (
-        <Card sx={{ minWidth: 275 }}>
+        <Card sx={{width: '40vw' , m: 2 , border:'1px solid #ccc'}}>
             <CardContent>
-                <svg width="800" id='count'></svg>
+                <h3>{isAcv ? 'ACV Data' : 'Count Data'}</h3>
+                <svg style={{'width' : '100%'}} ref={svgRef}></svg>
             </CardContent>
         </Card>
     )
 }
 
-export default Graph
+export default Graph;
