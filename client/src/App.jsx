@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css'
 import Graph from './components/Graph';
 import serverService from './server/serverService';
+import XL from './components/XL';
 
 function App() {
 
@@ -47,19 +48,29 @@ function App() {
 
   return (
     <div className="container">
-      <div className="graph" id="graph1">
+      <div className="graphs">
+      <div id="graph1">
         {countData.length > 0 ? (
           <Graph data={countData} maxValue={maxCountValue} />
         ) : (
           <p>Loading Count Data...</p>
         )}
       </div>
-      <div className="graph" id="graph2">
+      <div id="graph2">
         {acvData.length > 0 ? (
           <Graph isAcv={true} data={acvData} maxValue={maxAcvValue} />
         ) : (
           <p>Loading ACV Data...</p>
         )}
+      </div>
+      </div>
+      <div className="tables">
+        <div className="table1">
+          <XL data={countData} maxValue={maxCountValue} />
+        </div>
+        <div className="table2">
+          <XL isAcv={true} data={acvData} maxValue={maxAcvValue} />
+          </div>
       </div>
     </div>
   )

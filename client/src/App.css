@@ -6,6 +6,24 @@ body{
 
 .container{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.graphs{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tables{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+}
+
+.tables > *{
+  width: 45vw;
 }

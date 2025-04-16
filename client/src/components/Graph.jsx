@@ -71,7 +71,7 @@ function Graph({ isAcv = false, maxValue = 0, data = [] }) {
     }, [data, maxValue, isAcv]);
 
     return (
-        <Card sx={{width: '40vw' , m: 2 , border:'1px solid #ccc'}}>
+        <Card sx={{width: '40vw' , m: 2 }}>
             <CardContent>
                 <h3>{isAcv ? 'ACV Data' : 'Count Data'}</h3>
                 <svg style={{'width' : '100%'}} ref={svgRef}></svg>

@@ -1,0 +1,58 @@
+.stage-table-container {
+    margin: 16px;
+    padding: 16px;
+    overflow-x: auto;
+}
+
+.table-title {
+    margin-bottom: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.stage-table {
+    min-width: 600px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stage-table th,
+.stage-table td {
+    padding: 12px;
+    font-size: 0.95rem;
+}
+
+.alt-row {
+    background-color: #c2c2c2;
+}
+
+.lost-header {
+    background-color: #cc5500;
+    color: white;
+}
+
+.next-header {
+    background-color: #4caf50;
+    color: white;
+}
+
+
+.total-row td {
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .stage-table-container {
+        padding: 8px;
+    }
+
+    .stage-table th,
+    .stage-table td {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    .table-title {
+        font-size: 1rem;
+    }
+}
