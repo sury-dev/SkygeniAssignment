@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>D3 Stacked Bar Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .bar-group text {
+            font-size: 12px;
+            fill: #fff;
+        }
+
+        .label {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <svg width="800"></svg>
+
+    <script>
+        const data = [
+            {
+                "label": "Suspect",
+                "count": 24,
+                "lost": 6,
+                "qualified": 18,
+                "winPercent": 13,
+                "stagePercent": "-"
+            },
+            {
+                "label": "Qualify",
+                "count": 18,
+                "lost": 10,
+                "qualified": 8,
+                "winPercent": 17,
+                "stagePercent": 75
+            },
+            {
+                "label": "Demo",
+                "count": 8,
+                "lost": 4,
+                "qualified": 4,
+                "winPercent": 38,
+                "stagePercent": 44
+            },
+            {
+                "label": "Proposal",
+                "count": 4,
+                "lost": 1,
+                "qualified": 3,
+                "winPercent": 75,
+                "stagePercent": 50
+            },
+            {
+                "label": "Negotiate",
+                "count": 3,
+                "lost": 0,
+                "qualified": 3,
+                "winPercent": 100,
+                "stagePercent": 75
+            },
+            {
+                "label": "Won",
+                "count": 3,
+                "lost": "-",
+                "qualified": "-",
+                "winPercent": 100,
+                "stagePercent": 100
+            }
+        ];
+
+        const svg = d3.select("svg");
+        const width = +svg.attr("width") - 200;
+        const barHeight = 30;
+        const barSpacing = 30;
+        const leftLabelWidth = 80;
+        const rightLabelWidth = 40;
+
+        svg.attr("height", data.length * (barHeight + barSpacing));
+
+        data.forEach((d, i) => {
+            const y = i * (barHeight + barSpacing);
+
+            // Group
+            const g = svg.append("g").attr("transform", `translate(${leftLabelWidth}, ${y})`);
+
+            // Full bar (grey)
+            g.append("rect")
+                .attr("width", width)
+                .attr("height", barHeight)
+                .attr("fill", "#ccc");
+
+            // Green part
+            g.append("rect")
+                .attr("width", d.count / 24 * width) // Scale to fit the bar width
+                .attr("height", barHeight)
+                .attr("fill", "green")
+                .attr('x', (width - (d.count / 24 * width)) / 2);
+
+            // Value in center
+            g.append("text")
+                .attr("x", width / 2)
+                .attr("y", barHeight / 2 + 12)
+                .attr("text-anchor", "middle")
+                .text(`${d.count}`);
+
+            // % label inside bar
+            if (i != 0) {
+                g.append("text")
+                    .attr("x", width / 2)
+                    .attr("y", (barHeight * -1) / 2 + 12)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#000")
+                    .text(`${d.stagePercent}%`);
+            }
+
+            // Left stage label
+            svg.append("text")
+                .attr("x", 0)
+                .attr("y", y + barHeight / 2)
+                .attr("class", "label")
+                .text(d.label);
+
+            // Right-side %
+            svg.append("text")
+                .attr("x", width + leftLabelWidth + 10)
+                .attr("y", y + barHeight / 2)
+                .attr("class", "label")
+                .text(`${d.winPercent}%`);
+        });
+    </script>
+</body>
+
+</html>
